@@ -15,7 +15,8 @@ public class server extends ServerListener {
     public void onPluginDisable(PluginDisableEvent event) {
     	if (WebAuction.economy != null) {
             if(!WebAuction.economy.isEnabled()) {
-                System.out.println("[" + plugin.info.getName() + "] Payment method was disabled. No longer accepting payments.");
+                //Too spammy and not really needed as it is reported by vault anyway
+            	//System.out.println("[" + plugin.info.getName() + "] Payment method was disabled. No longer accepting payments.");
             }
         }
     }
@@ -25,6 +26,11 @@ public class server extends ServerListener {
     	if (WebAuction.economy != null) {
             if(WebAuction.economy.isEnabled()) {
                 System.out.println("[" + plugin.info.getName() + "] Payment method enabled: " + WebAuction.economy.getName() + ".");
+            }
+        }
+    	if (WebAuction.permission != null) {
+            if(WebAuction.permission.isEnabled()) {
+                System.out.println("[" + plugin.info.getName() + "] Permission method enabled: " + WebAuction.permission.getName() + ".");
             }
         }
     }
