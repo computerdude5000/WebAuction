@@ -1,9 +1,7 @@
 package me.exote.webauction;
 
-import java.net.MalformedURLException;
 import java.sql.ResultSet;
 
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -15,10 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class WebAuctionBlockListener extends BlockListener{
 	
-	private final WebAuction plugin;
-	
 	public WebAuctionBlockListener(final WebAuction plugin) {
-        this.plugin = plugin;
     }
 	@Override
 	public void onBlockBreak(BlockBreakEvent event){
@@ -27,7 +22,7 @@ public class WebAuctionBlockListener extends BlockListener{
 		if ((block.getTypeId() == 63)||(block.getTypeId() == 68)){
 			Sign thisSign = (Sign)block.getState();
 			if (thisSign.getLine(0).equals("[WebAuction]")){
-				if (!plugin.permission.has(player, "wa.remove")){
+				if (!WebAuction.permission.has(player, "wa.remove")){
 					event.setCancelled(true);
 					player.sendMessage(WebAuction.logPrefix + "You do not have permission to remove that");
 				}else{
@@ -45,7 +40,7 @@ public class WebAuctionBlockListener extends BlockListener{
     	if (player != null){
     	if (lines[0].equals("[WebAuction]")){
     		if (lines[1].equals("Shout")){
-    			if (plugin.permission.has(player, "wa.create.sign.shout")){
+    			if (WebAuction.permission.has(player, "wa.create.sign.shout")){
     				allowEvent = true;
     				player.sendMessage(WebAuction.logPrefix + "Shout sign created.");
     				int radius = Integer.parseInt(lines[2]);
@@ -53,20 +48,18 @@ public class WebAuctionBlockListener extends BlockListener{
     					WebAuction.shoutSigns.put(sign.getLocation(), radius);
         				String queryInsertRec = "INSERT INTO WA_ShoutSigns (world, radius, x, y, z) VALUES ('" + world.getName() +"', "+radius+", "+sign.getX()+", "+sign.getY()+", "+sign.getZ()+");";
         				try {
-        					plugin.manageMySQL.insertQuery(queryInsertRec);
+        					WebAuction.manageMySQL.insertQuery(queryInsertRec);
         				} catch (Exception e) {
-        					// TODO Auto-generated catch block
         					e.printStackTrace();
         				}
     				} catch (Exception e) {
-    					// TODO Auto-generated catch block
     					e.printStackTrace();
     				}
     			
     			}
     		}
     		if (lines[1].equals("Recent")){
-    			if (plugin.permission.has(player, "wa.create.sign.recent")){
+    			if (WebAuction.permission.has(player, "wa.create.sign.recent")){
     				allowEvent = true;
     				player.sendMessage(WebAuction.logPrefix + "Recent auction sign created.");
     				int amount = 1;
@@ -80,7 +73,7 @@ public class WebAuctionBlockListener extends BlockListener{
     				String recentQuery = "SELECT * FROM WA_Auctions ORDER BY id DESC;";
     				ResultSet result = null;
     				try{
-    					result = plugin.manageMySQL.sqlQuery(recentQuery);
+    					result = WebAuction.manageMySQL.sqlQuery(recentQuery);
     					int counter = 0;
     					while (counter < amount)
     					{
@@ -95,16 +88,14 @@ public class WebAuctionBlockListener extends BlockListener{
     					WebAuction.recentSigns.put(sign.getLocation(), amount);
         				String queryInsertRec = "INSERT INTO WA_RecentSigns (world, offset, x, y, z) VALUES ('" + world.getName() +"', "+amount+", "+sign.getX()+", "+sign.getY()+", "+sign.getZ()+");";
         				try {
-        					plugin.manageMySQL.insertQuery(queryInsertRec);
+        					WebAuction.manageMySQL.insertQuery(queryInsertRec);
         				} catch (Exception e) {
-        					// TODO Auto-generated catch block
         					e.printStackTrace();
         				}
     					event.setLine(1, stack.getType().toString());
     					event.setLine(2, quant+"");
     					event.setLine(3, ""+formattedPrice);
     				} catch (Exception e) {
-    					// TODO Auto-generated catch block
     					e.printStackTrace();
     				}
     				}else{
@@ -114,9 +105,8 @@ public class WebAuctionBlockListener extends BlockListener{
 	    				event.setLine(3, "Not Available");
         				String queryInsertRec = "INSERT INTO WA_RecentSigns (world, offset, x, y, z) VALUES ('" + world.getName() +"', "+amount+", "+sign.getX()+", "+sign.getY()+", "+sign.getZ()+");";
         				try {
-        					plugin.manageMySQL.insertQuery(queryInsertRec);
+        					WebAuction.manageMySQL.insertQuery(queryInsertRec);
         				} catch (Exception e) {
-        					// TODO Auto-generated catch block
         					e.printStackTrace();
         				}
 			    	}
@@ -124,26 +114,26 @@ public class WebAuctionBlockListener extends BlockListener{
     			}
     		}
     		if (lines[1].equals("Deposit")){
-    			if (plugin.permission.has(player, "wa.create.sign.deposit")){
+    			if (WebAuction.permission.has(player, "wa.create.sign.deposit")){
     				allowEvent = true;
     				player.sendMessage(WebAuction.logPrefix + "Deposit point created");
     			}
     			
     		}
     		if (lines[1].equals("Withdraw")){
-    			if (plugin.permission.has(player, "wa.create.sign.withdraw")){
+    			if (WebAuction.permission.has(player, "wa.create.sign.withdraw")){
     				allowEvent = true;
     				player.sendMessage(WebAuction.logPrefix + "Withdraw point created");
     			}
     		}
     		if ((lines[1].equals("MailBox"))||(lines[1].equals("Mailbox"))||(lines[1].equals("Mail Box"))){
     			if (lines[2].equals("Deposit")){
-      			  if (plugin.permission.has(player, "wa.create.sign.mailbox.deposit")){	        
+      			  if (WebAuction.permission.has(player, "wa.create.sign.mailbox.deposit")){	        
       				allowEvent = true;
       				player.sendMessage(WebAuction.logPrefix + "Deposit Mail Box created");
       			  }
       			}else{
-      				if (plugin.permission.has(player, "wa.create.sign.mailbox.withdraw")){	        
+      				if (WebAuction.permission.has(player, "wa.create.sign.mailbox.withdraw")){	        
         				allowEvent = true;
         				player.sendMessage(WebAuction.logPrefix + "Withdraw Mail Box created");
         			  }

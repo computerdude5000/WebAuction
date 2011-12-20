@@ -1,25 +1,13 @@
 package me.exote.webauction;
 
-import java.io.UnsupportedEncodingException;
+
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.net.MalformedURLException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
 
-import net.milkbowl.vault.economy.Economy;
-
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.enchantments.Enchantment;
@@ -32,11 +20,8 @@ import org.bukkit.inventory.ItemStack;
 
 
 public class WebAuctionPlayerListener extends PlayerListener{
-
-	private final WebAuction plugin;
 	
 	public WebAuctionPlayerListener(final WebAuction plugin) {
-        this.plugin = plugin;
     }
 	public static double round(double unrounded, int precision, int roundingMode)
 	{
@@ -49,16 +34,13 @@ public class WebAuctionPlayerListener extends PlayerListener{
 		Player player = event.getPlayer();
 		String playerName = player.getName();
 		WebAuction.playerTimer.put(player, WebAuction.getCurrentMilli());
-		String queryPlayers = "SELECT * FROM WA_Players WHERE name= '"+playerName+"';";
 		String queryMail = "SELECT * FROM WA_Mail WHERE name= '"+playerName+"';";
 		String queryAlerts = "SELECT * FROM WA_SaleAlerts WHERE seller= '"+playerName+"' AND alerted= 'false';";
-		ResultSet resultPlayers = null;
 		ResultSet resultMail = null;
 		ResultSet resultAlerts = null;
 		try {
-			resultAlerts = this.plugin.manageMySQL.sqlQuery(queryAlerts);
+			resultAlerts = WebAuction.manageMySQL.sqlQuery(queryAlerts);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -70,19 +52,17 @@ public class WebAuctionPlayerListener extends PlayerListener{
 					String item = resultAlerts.getString("item");
 					int quantity = resultAlerts.getInt("quantity");
 					Double priceEach = resultAlerts.getDouble("price");
-					Double priceTotal = quantity+priceEach;
 					player.sendMessage(WebAuction.logPrefix + "You sold "+quantity+" "+item+" to "+buyer+" for "+priceEach+" each.");
 					String updateAlerts = "UPDATE WA_SaleAlerts SET alerted = '1' WHERE id = '"+id+"';";
-					this.plugin.manageMySQL.updateQuery(updateAlerts);
+					WebAuction.manageMySQL.updateQuery(updateAlerts);
 				}
 			}
 		}catch (Exception e){
 			e.printStackTrace();
 		}
 		try {
-			resultMail = this.plugin.manageMySQL.sqlQuery(queryMail);
+			resultMail = WebAuction.manageMySQL.sqlQuery(queryMail);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -97,9 +77,8 @@ public class WebAuctionPlayerListener extends PlayerListener{
 		ResultSet result = null;
 		
 		try {
-			result = this.plugin.manageMySQL.sqlQuery(query);
+			result = WebAuction.manageMySQL.sqlQuery(query);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -107,34 +86,32 @@ public class WebAuctionPlayerListener extends PlayerListener{
 			int canBuy = 0;
 			int canSell = 0;
 			int isAdmin = 0;
-			if (plugin.permission.has(player, "wa.canbuy")){
+			if (WebAuction.permission.has(player, "wa.canbuy")){
 				canBuy = 1;
 			}
-			if (plugin.permission.has(player, "wa.cansell")){
+			if (WebAuction.permission.has(player, "wa.cansell")){
 				canSell = 1;
 			}
-			if (plugin.permission.has(player, "wa.webadmin")){
+			if (WebAuction.permission.has(player, "wa.webadmin")){
 				isAdmin = 1;
 			}
 			if ((result != null)  && (result.next())){
 				
 				String  updatePermissions = "UPDATE WA_Players SET canBuy = '"+canBuy+"' WHERE name='"+playerName+"';";
-				this.plugin.manageMySQL.updateQuery(updatePermissions);
+				WebAuction.manageMySQL.updateQuery(updatePermissions);
 				updatePermissions = "UPDATE WA_Players SET canSell = '"+canSell+"' WHERE name='"+playerName+"';";
-				this.plugin.manageMySQL.updateQuery(updatePermissions);
+				WebAuction.manageMySQL.updateQuery(updatePermissions);
 				updatePermissions = "UPDATE WA_Players SET isAdmin = '"+isAdmin+"' WHERE name='"+playerName+"';";
-				this.plugin.manageMySQL.updateQuery(updatePermissions);
+				WebAuction.manageMySQL.updateQuery(updatePermissions);
 				WebAuction.log.info(WebAuction.logPrefix + "Player found, canBuy: "+canBuy+" canSell: "+canSell+" isAdmin: "+isAdmin);
 				
 			} else{
 				WebAuction.log.info(WebAuction.logPrefix + "Player not found, creating account");
 				//create that person in database
-				String pass = WebAuctionCommands.MD5("Password");
 				String queryInsert = "INSERT INTO WA_Players (name, pass, money, canBuy, canSell, isAdmin) VALUES ('" + player.getName() +"', 'Password', " + 0 +", "+ canBuy +", "+ canSell +", "+ isAdmin +");";
 				try {
-					this.plugin.manageMySQL.insertQuery(queryInsert);
+					WebAuction.manageMySQL.insertQuery(queryInsert);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}	
 			}
@@ -142,6 +119,7 @@ public class WebAuctionPlayerListener extends PlayerListener{
 			e.printStackTrace();
 		}
 	}
+	@SuppressWarnings("deprecation")
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 
@@ -150,7 +128,6 @@ public class WebAuctionPlayerListener extends PlayerListener{
 		Block block = event.getClickedBlock();
 		WebAuction.economy.getBalance(playerName);
 		if (block!=null){
-			Location blockLoc = block.getLocation();
 			int blockMat = block.getTypeId();
 			
 			if ((blockMat == 63)||(blockMat == 68)){
@@ -162,7 +139,7 @@ public class WebAuctionPlayerListener extends PlayerListener{
 					if (WebAuction.playerTimer.get(player) < WebAuction.getCurrentMilli()){
 						WebAuction.playerTimer.put(player, WebAuction.getCurrentMilli()+ WebAuction.signDelay);
 						if (lines[1].equals("Deposit")){
-							if (plugin.permission.has(player, "wa.use.deposit.money")){
+							if (WebAuction.permission.has(player, "wa.use.deposit.money")){
 								Double amount = 0.0;
 								if (!lines[2].equals("All")){
 									amount = Double.parseDouble(lines[2]);
@@ -194,7 +171,7 @@ public class WebAuctionPlayerListener extends PlayerListener{
 								}
 							}			
 						}else if (lines[1].equals("Withdraw")){
-							if (plugin.permission.has(player, "wa.use.withdraw.money")){
+							if (WebAuction.permission.has(player, "wa.use.withdraw.money")){
 								Double amount = 0.0;
 								if (!lines[2].equals("All")){
 									amount = Double.parseDouble(lines[2]);
@@ -223,7 +200,6 @@ public class WebAuctionPlayerListener extends PlayerListener{
 										player.sendMessage(WebAuction.logPrefix + "No WebAuction account found, try logging off and back on again");
 									}
 								} catch (Exception e) {
-									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
 							} else {
@@ -272,7 +248,7 @@ public class WebAuctionPlayerListener extends PlayerListener{
 												    		enchTableId = result2.getInt("id");
 												    	} else {										    
 												    		String queryInsert = "INSERT INTO WA_Enchantments (enchName, enchId, level) VALUES ('" +enchName+"', '" +enchId+"', '"+level+"');";
-												    		this.plugin.manageMySQL.insertQuery(queryInsert);
+												    		WebAuction.manageMySQL.insertQuery(queryInsert);
 												    	}
 												    }
 												    enchantmentIds.add(enchTableId);
@@ -294,7 +270,7 @@ public class WebAuctionPlayerListener extends PlayerListener{
 													currentQuantity += quantityInt;
 													String queryUpdate = "UPDATE WA_Items SET quantity='"+currentQuantity+"' WHERE id='"+itemTableIdNumber+"';";
 													//event.getPlayer().sendMessage(queryUpdate);
-													this.plugin.manageMySQL.updateQuery(queryUpdate);
+													WebAuction.manageMySQL.updateQuery(queryUpdate);
 													foundMatch = true;
 												}else
 												if ((enchantmentIds.isEmpty())&&(enchantmentIdsStoredTemp.isEmpty())){
@@ -303,7 +279,7 @@ public class WebAuctionPlayerListener extends PlayerListener{
 													currentQuantity += quantityInt;
 													String queryUpdate = "UPDATE WA_Items SET quantity='"+currentQuantity+"' WHERE id='"+itemTableIdNumber+"';";
 													//event.getPlayer().sendMessage(queryUpdate);
-													this.plugin.manageMySQL.updateQuery(queryUpdate);
+													WebAuction.manageMySQL.updateQuery(queryUpdate);
 													foundMatch = true;
 									
 												}
@@ -312,7 +288,7 @@ public class WebAuctionPlayerListener extends PlayerListener{
 												
 												String queryInsert = "INSERT INTO WA_Items (name, damage, player, quantity) VALUES ('" +itemName+"', '" +itemDamage+"', '"+playerName+"', '"+quantityInt+"');";
 												//event.getPlayer().sendMessage(queryInsert);
-												this.plugin.manageMySQL.insertQuery(queryInsert);
+												WebAuction.manageMySQL.insertQuery(queryInsert);
 												querySelect = "SELECT * FROM WA_Items WHERE player='"+playerName+"' AND name='"+itemName+"' AND damage='"+itemDamage+"' ORDER BY id DESC;";
 												result = null;
 												int itemTableId = -1;
@@ -337,24 +313,23 @@ public class WebAuctionPlayerListener extends PlayerListener{
 												    		enchTableId = result.getInt("id");
 												    	} else {										    
 												    		queryInsert = "INSERT INTO WA_Enchantments (enchName, enchId, level) VALUES ('" +enchName+"', '" +enchId+"', '"+level+"');";
-												    		this.plugin.manageMySQL.insertQuery(queryInsert);
+												    		WebAuction.manageMySQL.insertQuery(queryInsert);
 												    	}
 												    }
 												    queryInsert = "INSERT INTO WA_EnchantLinks (enchId, itemTableId, itemId) VALUES ('" +enchTableId+"', '0', '"+itemTableId+"');";
-										    		this.plugin.manageMySQL.insertQuery(queryInsert);
+												    WebAuction.manageMySQL.insertQuery(queryInsert);
 												}
 											}
 											player.sendMessage(WebAuction.logPrefix + "Item stack stored.");
 										}
 									}
 								} catch (Exception e) {
-									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
 								player.setItemInHand(null);
 								
 							}else{
-							if (plugin.permission.has(player, "wa.use.withdraw.items")){
+							if (WebAuction.permission.has(player, "wa.use.withdraw.items")){
 								try {
 									String query = "SELECT * FROM WA_Mail WHERE player = '"+playerName+"'";
 									
@@ -427,7 +402,6 @@ public class WebAuctionPlayerListener extends PlayerListener{
 										player.sendMessage(WebAuction.logPrefix + "No mail");
 									}
 								} catch (Exception e) {
-									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
 							} else {

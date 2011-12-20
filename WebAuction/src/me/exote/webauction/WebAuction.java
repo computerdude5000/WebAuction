@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.Economy;

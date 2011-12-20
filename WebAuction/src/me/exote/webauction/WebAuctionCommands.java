@@ -1,22 +1,18 @@
 package me.exote.webauction;
 
-import java.net.MalformedURLException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 
-import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class WebAuctionCommands implements CommandExecutor{
-	private final WebAuction plugin;
+	
 	
 	public WebAuctionCommands(final WebAuction plugin) {
-        this.plugin = plugin;
+        
     }
 	public static String MD5(String str) {
 	    MessageDigest md = null;
@@ -56,11 +52,10 @@ public class WebAuctionCommands implements CommandExecutor{
 					String newPass = MD5(split[1]);
 					String queryUpdate = "UPDATE WA_Players SET pass='"+newPass+"' WHERE name='"+player.getName()+"';";
 					try {
-						this.plugin.manageMySQL.updateQuery(queryUpdate);
+						WebAuction.manageMySQL.updateQuery(queryUpdate);
 						player.sendMessage(WebAuction.logPrefix + "Password changed");
 						return true;
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					return false;
