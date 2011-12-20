@@ -39,7 +39,7 @@ public class WebAuctionPlayerListener extends PlayerListener{
 		ResultSet resultMail = null;
 		ResultSet resultAlerts = null;
 		try {
-			resultAlerts = WebAuction.manageMySQL.sqlQuery(queryAlerts);
+			resultAlerts = WebAuction.mysql.query(queryAlerts);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -54,14 +54,14 @@ public class WebAuctionPlayerListener extends PlayerListener{
 					Double priceEach = resultAlerts.getDouble("price");
 					player.sendMessage(WebAuction.logPrefix + "You sold "+quantity+" "+item+" to "+buyer+" for "+priceEach+" each.");
 					String updateAlerts = "UPDATE WA_SaleAlerts SET alerted = '1' WHERE id = '"+id+"';";
-					WebAuction.manageMySQL.updateQuery(updateAlerts);
+					WebAuction.mysql.query(updateAlerts);
 				}
 			}
 		}catch (Exception e){
 			e.printStackTrace();
 		}
 		try {
-			resultMail = WebAuction.manageMySQL.sqlQuery(queryMail);
+			resultMail = WebAuction.mysql.query(queryMail);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -77,7 +77,7 @@ public class WebAuctionPlayerListener extends PlayerListener{
 		ResultSet result = null;
 		
 		try {
-			result = WebAuction.manageMySQL.sqlQuery(query);
+			result = WebAuction.mysql.query(query);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -98,11 +98,11 @@ public class WebAuctionPlayerListener extends PlayerListener{
 			if ((result != null)  && (result.next())){
 				
 				String  updatePermissions = "UPDATE WA_Players SET canBuy = '"+canBuy+"' WHERE name='"+playerName+"';";
-				WebAuction.manageMySQL.updateQuery(updatePermissions);
+				WebAuction.mysql.query(updatePermissions);
 				updatePermissions = "UPDATE WA_Players SET canSell = '"+canSell+"' WHERE name='"+playerName+"';";
-				WebAuction.manageMySQL.updateQuery(updatePermissions);
+				WebAuction.mysql.query(updatePermissions);
 				updatePermissions = "UPDATE WA_Players SET isAdmin = '"+isAdmin+"' WHERE name='"+playerName+"';";
-				WebAuction.manageMySQL.updateQuery(updatePermissions);
+				WebAuction.mysql.query(updatePermissions);
 				WebAuction.log.info(WebAuction.logPrefix + "Player found, canBuy: "+canBuy+" canSell: "+canSell+" isAdmin: "+isAdmin);
 				
 			} else{
@@ -110,7 +110,7 @@ public class WebAuctionPlayerListener extends PlayerListener{
 				//create that person in database
 				String queryInsert = "INSERT INTO WA_Players (name, pass, money, canBuy, canSell, isAdmin) VALUES ('" + player.getName() +"', 'Password', " + 0 +", "+ canBuy +", "+ canSell +", "+ isAdmin +");";
 				try {
-					WebAuction.manageMySQL.insertQuery(queryInsert);
+					WebAuction.mysql.query(queryInsert);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}	
@@ -147,7 +147,7 @@ public class WebAuctionPlayerListener extends PlayerListener{
 									try {
 										String query = "SELECT * FROM WA_Players WHERE name = '"+playerName+"'";
 										ResultSet result = null;
-										result = WebAuction.manageMySQL.sqlQuery(query);
+										result = WebAuction.mysql.query(query);
 										if (result.next()) {
 											Double currentMoney = result.getDouble("money");
 											if (lines[2].equals("All")){
@@ -157,7 +157,7 @@ public class WebAuctionPlayerListener extends PlayerListener{
 											currentMoney = round(currentMoney, 2, BigDecimal.ROUND_HALF_UP);
 											player.sendMessage(WebAuction.logPrefix + "Added "+amount+" to auction account, new auction balance: "+ currentMoney);
 											String queryUpdate = "UPDATE WA_Players SET money='"+currentMoney+"' WHERE name='"+playerName+"';";
-											WebAuction.manageMySQL.updateQuery(queryUpdate);
+											WebAuction.mysql.query(queryUpdate);
 											WebAuction.economy.withdrawPlayer(playerName, amount);
 										} else {
 											player.sendMessage(WebAuction.logPrefix + "No WebAuction account found, try logging off and back on again");
@@ -178,7 +178,7 @@ public class WebAuctionPlayerListener extends PlayerListener{
 								try {
 									String query = "SELECT * FROM WA_Players WHERE name = '"+playerName+"'";
 									ResultSet result = null;
-									result = WebAuction.manageMySQL.sqlQuery(query);
+									result = WebAuction.mysql.query(query);
 									if (result.next()) {
 										// Match found!
 										Double currentMoney = result.getDouble("money");
@@ -190,7 +190,7 @@ public class WebAuctionPlayerListener extends PlayerListener{
 											currentMoney = round(currentMoney, 2, BigDecimal.ROUND_HALF_UP);
 											player.sendMessage(WebAuction.logPrefix + "Removed "+amount+" from auction account, new auction balance: "+ currentMoney);
 											String queryUpdate = "UPDATE WA_Players SET money='"+currentMoney+"' WHERE name='"+playerName+"';";
-											WebAuction.manageMySQL.updateQuery(queryUpdate);
+											WebAuction.mysql.query(queryUpdate);
 											WebAuction.economy.depositPlayer(playerName,amount);
 										}else{
 											player.sendMessage(WebAuction.logPrefix + "You do not have enough money in your WebAuction account.");
@@ -225,7 +225,7 @@ public class WebAuctionPlayerListener extends PlayerListener{
 										
 											String querySelect = "SELECT * FROM WA_Items WHERE player='"+playerName+"' AND name='"+itemName+"' AND damage='"+itemDamage+"';";
 											ResultSet result = null;
-											result = WebAuction.manageMySQL.sqlQuery(querySelect);
+											result = WebAuction.mysql.query(querySelect);
 											Boolean foundMatch = false;
 											while ((result != null)  && (result.next())){
 												int itemTableIdNumber = result.getInt("id");
@@ -242,12 +242,12 @@ public class WebAuctionPlayerListener extends PlayerListener{
 												    {
 												    	querySelect = "SELECT * FROM WA_Enchantments WHERE enchId='"+enchId+"' AND level='"+level+"' AND enchName='"+enchName+"';";
 												    	ResultSet result2 = null;
-												    	result2 = WebAuction.manageMySQL.sqlQuery(querySelect);
+												    	result2 = WebAuction.mysql.query(querySelect);
 												    	if ((result2 != null)  && (result2.next())){
 												    		enchTableId = result2.getInt("id");
 												    	} else {										    
 												    		String queryInsert = "INSERT INTO WA_Enchantments (enchName, enchId, level) VALUES ('" +enchName+"', '" +enchId+"', '"+level+"');";
-												    		WebAuction.manageMySQL.insertQuery(queryInsert);
+												    		WebAuction.mysql.query(queryInsert);
 												    	}
 												    }
 												    enchantmentIds.add(enchTableId);
@@ -256,7 +256,7 @@ public class WebAuctionPlayerListener extends PlayerListener{
 												Collections.sort(enchantmentIds);
 												querySelect = "SELECT * FROM WA_EnchantLinks WHERE itemTableId='0' AND itemId='"+result.getInt("id")+"' ORDER BY enchId DESC;";
 												ResultSet result3 = null;
-												result3 = WebAuction.manageMySQL.sqlQuery(querySelect);
+												result3 = WebAuction.mysql.query(querySelect);
 												while ((result3 != null)  && (result3.next())){
 													enchantmentIdsStoredTemp.add(result3.getInt("enchId"));
 												}
@@ -269,7 +269,7 @@ public class WebAuctionPlayerListener extends PlayerListener{
 													currentQuantity += quantityInt;
 													String queryUpdate = "UPDATE WA_Items SET quantity='"+currentQuantity+"' WHERE id='"+itemTableIdNumber+"';";
 													//event.getPlayer().sendMessage(queryUpdate);
-													WebAuction.manageMySQL.updateQuery(queryUpdate);
+													WebAuction.mysql.query(queryUpdate);
 													foundMatch = true;
 												}else
 												if ((enchantmentIds.isEmpty())&&(enchantmentIdsStoredTemp.isEmpty())){
@@ -278,7 +278,7 @@ public class WebAuctionPlayerListener extends PlayerListener{
 													currentQuantity += quantityInt;
 													String queryUpdate = "UPDATE WA_Items SET quantity='"+currentQuantity+"' WHERE id='"+itemTableIdNumber+"';";
 													//event.getPlayer().sendMessage(queryUpdate);
-													WebAuction.manageMySQL.updateQuery(queryUpdate);
+													WebAuction.mysql.query(queryUpdate);
 													foundMatch = true;
 									
 												}
@@ -287,11 +287,11 @@ public class WebAuctionPlayerListener extends PlayerListener{
 												
 												String queryInsert = "INSERT INTO WA_Items (name, damage, player, quantity) VALUES ('" +itemName+"', '" +itemDamage+"', '"+playerName+"', '"+quantityInt+"');";
 												//event.getPlayer().sendMessage(queryInsert);
-												WebAuction.manageMySQL.insertQuery(queryInsert);
+												WebAuction.mysql.query(queryInsert);
 												querySelect = "SELECT * FROM WA_Items WHERE player='"+playerName+"' AND name='"+itemName+"' AND damage='"+itemDamage+"' ORDER BY id DESC;";
 												result = null;
 												int itemTableId = -1;
-												result = WebAuction.manageMySQL.sqlQuery(querySelect);
+												result = WebAuction.mysql.query(querySelect);
 												if ((result != null)  && (result.next())){
 													itemTableId = result.getInt("id");
 												}
@@ -307,16 +307,16 @@ public class WebAuctionPlayerListener extends PlayerListener{
 												    {
 												    	querySelect = "SELECT * FROM WA_Enchantments WHERE enchId='"+enchId+"' AND level='"+level+"' AND enchName='"+enchName+"';";
 												    	result = null;
-												    	result = WebAuction.manageMySQL.sqlQuery(querySelect);
+												    	result = WebAuction.mysql.query(querySelect);
 												    	if ((result != null)  && (result.next())){
 												    		enchTableId = result.getInt("id");
 												    	} else {										    
 												    		queryInsert = "INSERT INTO WA_Enchantments (enchName, enchId, level) VALUES ('" +enchName+"', '" +enchId+"', '"+level+"');";
-												    		WebAuction.manageMySQL.insertQuery(queryInsert);
+												    		WebAuction.mysql.query(queryInsert);
 												    	}
 												    }
 												    queryInsert = "INSERT INTO WA_EnchantLinks (enchId, itemTableId, itemId) VALUES ('" +enchTableId+"', '0', '"+itemTableId+"');";
-												    WebAuction.manageMySQL.insertQuery(queryInsert);
+												    WebAuction.mysql.query(queryInsert);
 												}
 											}
 											player.sendMessage(WebAuction.logPrefix + "Item stack stored.");
@@ -334,20 +334,20 @@ public class WebAuctionPlayerListener extends PlayerListener{
 									
 									ResultSet result = null;
 									boolean invFull = true;
-									result = WebAuction.manageMySQL.sqlQuery(query);
+									result = WebAuction.mysql.query(query);
 									while (result.next()) {
 										// Match found!
 										Boolean enchanted = false;
 										ArrayList<Integer> enchantments = new ArrayList<Integer>();
 										ArrayList<Integer> enchLevels = new ArrayList<Integer>();
 										String queryEnchLink = "SELECT * FROM WA_EnchantLinks WHERE itemId = '"+result.getInt("id")+"' AND itemTableId = '2'";
-										ResultSet resultEnchLink = WebAuction.manageMySQL.sqlQuery(queryEnchLink);
+										ResultSet resultEnchLink = WebAuction.mysql.query(queryEnchLink);
 										if (player.getInventory().firstEmpty() != -1){
 											ItemStack stack = new ItemStack(result.getInt("name"), result.getInt("quantity"), result.getShort("damage"));
 											while (resultEnchLink.next()){
 												
 												String queryEnch = "SELECT * FROM WA_Enchantments WHERE id = '"+resultEnchLink.getInt("enchId")+"'";
-												ResultSet resultEnch = WebAuction.manageMySQL.sqlQuery(queryEnch);
+												ResultSet resultEnch = WebAuction.mysql.query(queryEnch);
 												while (resultEnch.next()){
 													Enchantment tempEnch = Enchantment.getById(resultEnch.getInt("enchId"));
 													//player.sendMessage(tempEnch.getName()+" "+resultEnch.getInt("level"));
@@ -367,7 +367,7 @@ public class WebAuctionPlayerListener extends PlayerListener{
 											}
 											int id = result.getInt("id");
 											query = "DELETE FROM WA_Mail WHERE id='"+id+"';";
-											WebAuction.manageMySQL.deleteQuery(query);
+											WebAuction.mysql.query(query);
 											int firstEmpty = -1;
 											if (enchanted == true)
 											{

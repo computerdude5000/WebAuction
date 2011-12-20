@@ -48,7 +48,7 @@ public class WebAuctionBlockListener extends BlockListener{
     					WebAuction.shoutSigns.put(sign.getLocation(), radius);
         				String queryInsertRec = "INSERT INTO WA_ShoutSigns (world, radius, x, y, z) VALUES ('" + world.getName() +"', "+radius+", "+sign.getX()+", "+sign.getY()+", "+sign.getZ()+");";
         				try {
-        					WebAuction.manageMySQL.insertQuery(queryInsertRec);
+        					WebAuction.mysql.query(queryInsertRec);
         				} catch (Exception e) {
         					e.printStackTrace();
         				}
@@ -73,7 +73,7 @@ public class WebAuctionBlockListener extends BlockListener{
     				String recentQuery = "SELECT * FROM WA_Auctions ORDER BY id DESC;";
     				ResultSet result = null;
     				try{
-    					result = WebAuction.manageMySQL.sqlQuery(recentQuery);
+    					result = WebAuction.mysql.query(recentQuery);
     					int counter = 0;
     					while (counter < amount)
     					{
@@ -88,7 +88,7 @@ public class WebAuctionBlockListener extends BlockListener{
     					WebAuction.recentSigns.put(sign.getLocation(), amount);
         				String queryInsertRec = "INSERT INTO WA_RecentSigns (world, offset, x, y, z) VALUES ('" + world.getName() +"', "+amount+", "+sign.getX()+", "+sign.getY()+", "+sign.getZ()+");";
         				try {
-        					WebAuction.manageMySQL.insertQuery(queryInsertRec);
+        					WebAuction.mysql.query(queryInsertRec);
         				} catch (Exception e) {
         					e.printStackTrace();
         				}
@@ -105,7 +105,7 @@ public class WebAuctionBlockListener extends BlockListener{
 	    				event.setLine(3, "Not Available");
         				String queryInsertRec = "INSERT INTO WA_RecentSigns (world, offset, x, y, z) VALUES ('" + world.getName() +"', "+amount+", "+sign.getX()+", "+sign.getY()+", "+sign.getZ()+");";
         				try {
-        					WebAuction.manageMySQL.insertQuery(queryInsertRec);
+        					WebAuction.mysql.query(queryInsertRec);
         				} catch (Exception e) {
         					e.printStackTrace();
         				}

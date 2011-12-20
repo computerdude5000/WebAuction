@@ -52,7 +52,7 @@ public class WebAuctionCommands implements CommandExecutor{
 					String newPass = MD5(split[1]);
 					String queryUpdate = "UPDATE WA_Players SET pass='"+newPass+"' WHERE name='"+player.getName()+"';";
 					try {
-						WebAuction.manageMySQL.updateQuery(queryUpdate);
+						WebAuction.mysql.query(queryUpdate);
 						player.sendMessage(WebAuction.logPrefix + "Password changed");
 						return true;
 					} catch (Exception e) {
