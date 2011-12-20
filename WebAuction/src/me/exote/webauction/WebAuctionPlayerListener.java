@@ -126,7 +126,6 @@ public class WebAuctionPlayerListener extends PlayerListener{
 		Player player = event.getPlayer();
 		String playerName = player.getName();
 		Block block = event.getClickedBlock();
-		WebAuction.economy.getBalance(playerName);
 		if (block!=null){
 			int blockMat = block.getTypeId();
 			

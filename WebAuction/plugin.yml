@@ -21,8 +21,8 @@ permissions:
             wa.create.sign.mailbox.withdraw: true
             wa.create.sign.recent: true
             wa.create.sign.shout: true
-            wa.canBuy: true
-            wa.canSell: true
+            wa.canbuy: true
+            wa.cansell: true
             wa.remove: true
             wa.webadmin: true
     wa.use.*:
@@ -32,8 +32,8 @@ permissions:
             wa.use.withdraw.money: true
             wa.use.deposit.items: true
             wa.use.deposit.money: true
-            wa.canBuy: true
-            wa.canSell: true
+            wa.canbuy: true
+            wa.cansell: true
     wa.use.withdraw.items:
         description: Lets you use the mailbox
         default: true
@@ -46,10 +46,10 @@ permissions:
     wa.use.deposit.money:
         description: Lets you deposit money to web account
         default: true
-    wa.canBuy:
+    wa.canbuy:
         description: Lets you buy items on the website
         default: true
-    wa.canSell:
+    wa.cansell:
         description: Lets sell items on the website
         default: true
     wa.create.sign.deposit:
