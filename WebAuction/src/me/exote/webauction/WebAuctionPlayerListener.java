@@ -207,7 +207,7 @@ public class WebAuctionPlayerListener extends PlayerListener{
 							}
 						}
 						else if ((lines[1].equals("MailBox"))||(lines[1].equals("Mailbox"))||(lines[1].equals("Mail Box"))){
-							if (lines[2].equals("Deposit")){
+							if ((lines[2].equals("Deposit"))&&(WebAuction.permission.has(player, "wa.use.deposit.items"))){
 								ItemStack stack = player.getItemInHand();
 								try {
 									if (stack != null){
