@@ -56,6 +56,9 @@ public class WebAuction extends JavaPlugin {
 		String dbPass = getConfig().getString("MySQL.Password");
 		String dbPort = getConfig().getString("MySQL.Port");
 		String dbDatabase = getConfig().getString("MySQL.Database");
+		long saleAlertFrequency = getConfig().getLong("Updates.SaleAlertFrequency");
+		long shoutSignUpdateFrequency = getConfig().getLong("Updates.ShoutSignUpdateFrequency");
+		long recentSignUpdateFrequency = getConfig().getLong("Updates.RecentSignUpdateFrequency");
 		boolean getMessages = getConfig().getBoolean("Misc.ReportSales");
 		signDelay = getConfig().getInt("Misc.SignDelay");
 
@@ -79,11 +82,11 @@ public class WebAuction extends JavaPlugin {
 
 		// If reporting sales in game, schedule sales alert task
 		if (getMessages == true) {
-			getServer().getScheduler().scheduleAsyncRepeatingTask(this, new SaleAlertTask(this), 1 * 30L, 1 * 30L);
+			getServer().getScheduler().scheduleAsyncRepeatingTask(this, new SaleAlertTask(this), saleAlertFrequency, saleAlertFrequency);
 		}
 
-		getServer().getScheduler().scheduleAsyncRepeatingTask(this, new ShoutSignTask(this), 1 * 90L, 1 * 90L);
-		getServer().getScheduler().scheduleAsyncRepeatingTask(this, new RecentSignTask(this), 1 * 160L, 1 * 160L);
+		getServer().getScheduler().scheduleAsyncRepeatingTask(this, new ShoutSignTask(this), shoutSignUpdateFrequency, shoutSignUpdateFrequency);
+		getServer().getScheduler().scheduleAsyncRepeatingTask(this, new RecentSignTask(this), recentSignUpdateFrequency, recentSignUpdateFrequency);
 
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
@@ -108,6 +111,9 @@ public class WebAuction extends JavaPlugin {
 		getConfig().addDefault("MySQL.Database", "minecraft");
 		getConfig().addDefault("Misc.ReportSales", false);
 		getConfig().addDefault("Misc.SignDelay", 1000);
+		getConfig().addDefault("Updates.SaleAlertFrequency", 30L);
+		getConfig().addDefault("Updates.ShoutSignUpdateFrequency", 90L);
+		getConfig().addDefault("Updates.RecentSignUpdateFrequency", 160L);
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 	}
