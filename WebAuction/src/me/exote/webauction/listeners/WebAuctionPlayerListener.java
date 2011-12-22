@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import me.exote.webauction.WebAuction;
 import me.exote.webauction.dao.AuctionItem;
@@ -137,6 +138,71 @@ public class WebAuctionPlayerListener extends PlayerListener {
 					player.sendMessage(plugin.logPrefix + "You do not have enough money in your pocket.");
 				}
 			}
+		} else if (lines[1].equals("Shout")) {
+			Random generator = new Random();
+			int roll = generator.nextInt(20);
+			switch (roll){
+			case 0:
+				player.sendMessage(plugin.logPrefix + "RAAN MIR TAH!");
+				break;
+			case 1:
+				player.sendMessage(plugin.logPrefix + "LAAS YAH NIR!");
+				break;
+			case 2:
+				player.sendMessage(plugin.logPrefix + "FEIM ZII GRON!");
+				break;
+			case 3:
+				player.sendMessage(plugin.logPrefix + "OD AH VIING!");
+				break;
+			case 4:
+				player.sendMessage(plugin.logPrefix + "HUN KAL ZOOR!");
+				break;
+			case 5:
+				player.sendMessage(plugin.logPrefix + "LOK VAH KOOR!");
+				break;
+			case 6:
+				player.sendMessage(plugin.logPrefix + "ZUN HAAL VIK!");
+				break;
+			case 7:
+				player.sendMessage(plugin.logPrefix + "FAAS RU MAAR!");
+				break;
+			case 8:
+				player.sendMessage(plugin.logPrefix + "JOOR ZAH FRUL!");
+				break;
+			case 9:
+				player.sendMessage(plugin.logPrefix + "SU GRAH DUN!");
+				break;
+			case 10:
+				player.sendMessage(plugin.logPrefix + "YOL TOOR SHOL!");
+				break;
+			case 11:
+				player.sendMessage(plugin.logPrefix + "FO KRAH DIIN!");
+				break;
+			case 12:
+				player.sendMessage(plugin.logPrefix + "LIZ SLEN NUS!");
+				break;
+			case 13:
+				player.sendMessage(plugin.logPrefix + "KAAN DREM OV!");
+				break;
+			case 14:
+				player.sendMessage(plugin.logPrefix + "KRII LUN AUS!");
+				break;
+			case 15:
+				player.sendMessage(plugin.logPrefix + "TIID KLO UL!");
+				break;
+			case 16:
+				player.sendMessage(plugin.logPrefix + "STRUN BAH QO!");
+				break;
+			case 17:
+				player.sendMessage(plugin.logPrefix + "ZUL MEY GUT!");
+				break;
+			case 18:
+				player.sendMessage(plugin.logPrefix + "WULK NAH KEST!");
+				break;
+			default:
+				player.sendMessage(plugin.logPrefix + "FUS RO DAH!");
+				break;
+			}	
 		} else if (lines[1].equals("Withdraw")) {
 			if (plugin.permission.has(player, "wa.use.withdraw.money")) {
 				double amount = 0.0;

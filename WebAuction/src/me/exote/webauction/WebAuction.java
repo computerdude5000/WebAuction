@@ -96,6 +96,8 @@ public class WebAuction extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		getServer().getScheduler().cancelTasks(this);
+		log.info(logPrefix + "Disabled. Bye :D");
 	}
 
 	private void initConfig() {
