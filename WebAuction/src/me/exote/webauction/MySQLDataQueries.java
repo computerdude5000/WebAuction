@@ -113,7 +113,7 @@ public class MySQLDataQueries {
 	public void initTables() {
 		if (!tableExists("WA_Players")) {
 			plugin.log.info(plugin.logPrefix + "Creating table WA_Players");
-			executeRawSQL("CREATE TABLE WA_Players (id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), name VARCHAR(255), pass VARCHAR(255), money DOUBLE, canBuy INT, canSell INT, isAdmin INT);");
+			executeRawSQL("CREATE TABLE WA_Players (id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), name VARCHAR(255), pass VARCHAR(255), money DOUBLE, itemsSold INT, itemsBought INT, earnt DOUBLE, spent DOUBLE, canBuy INT, canSell INT, isAdmin INT);");
 		}
 		if (!tableExists("WA_StorageCheck")) {
 			plugin.log.info(plugin.logPrefix + "Creating table WA_StorageCheck");
