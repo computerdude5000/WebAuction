@@ -48,7 +48,7 @@ public class WebAuction extends JavaPlugin {
 	@Override
 	public void onEnable() {
 
-		log.info(logPrefix + "WebAuction is initializing");
+		log.info(logPrefix + "WebAuction is initializing.");
 
 		initConfig();
 		String dbHost = getConfig().getString("MySQL.Host");
@@ -60,6 +60,7 @@ public class WebAuction extends JavaPlugin {
 		long shoutSignUpdateFrequency = getConfig().getLong("Updates.ShoutSignUpdateFrequency");
 		long recentSignUpdateFrequency = getConfig().getLong("Updates.RecentSignUpdateFrequency");
 		boolean getMessages = getConfig().getBoolean("Misc.ReportSales");
+		boolean useMultithreads = getConfig().getBoolean("Development.UseMultithreads");
 		signDelay = getConfig().getInt("Misc.SignDelay");
 
 		getCommand("wa").setExecutor(new WebAuctionCommands(this));
@@ -71,7 +72,7 @@ public class WebAuction extends JavaPlugin {
 		dataQueries = new MySQLDataQueries(this, dbHost, dbPort, dbUser, dbPass, dbDatabase);
 
 		// Init tables
-		log.info(logPrefix + "MySQL Initializing");
+		log.info(logPrefix + "MySQL Initializing.");
 		dataQueries.initTables();
 
 		// Build shoutSigns map
@@ -81,12 +82,23 @@ public class WebAuction extends JavaPlugin {
 		recentSigns.putAll(dataQueries.getRecentSignLocations());
 
 		// If reporting sales in game, schedule sales alert task
-		if (getMessages == true) {
-			getServer().getScheduler().scheduleAsyncRepeatingTask(this, new SaleAlertTask(this), saleAlertFrequency, saleAlertFrequency);
-		}
+		if (useMultithreads){
+			log.info(logPrefix + "Using Multiple Threads.");
+			if (getMessages) {
+				getServer().getScheduler().scheduleAsyncRepeatingTask(this, new SaleAlertTask(this), saleAlertFrequency, saleAlertFrequency);
+			}
 
-		getServer().getScheduler().scheduleAsyncRepeatingTask(this, new ShoutSignTask(this), shoutSignUpdateFrequency, shoutSignUpdateFrequency);
-		getServer().getScheduler().scheduleAsyncRepeatingTask(this, new RecentSignTask(this), recentSignUpdateFrequency, recentSignUpdateFrequency);
+			getServer().getScheduler().scheduleAsyncRepeatingTask(this, new ShoutSignTask(this), shoutSignUpdateFrequency, shoutSignUpdateFrequency);
+			getServer().getScheduler().scheduleAsyncRepeatingTask(this, new RecentSignTask(this), recentSignUpdateFrequency, recentSignUpdateFrequency);
+		}else{
+			log.info(logPrefix + "Using Single Thread.");
+			if (getMessages) {
+				getServer().getScheduler().scheduleSyncRepeatingTask(this, new SaleAlertTask(this), saleAlertFrequency, saleAlertFrequency);
+			}
+
+			getServer().getScheduler().scheduleSyncRepeatingTask(this, new ShoutSignTask(this), shoutSignUpdateFrequency, shoutSignUpdateFrequency);
+			getServer().getScheduler().scheduleSyncRepeatingTask(this, new RecentSignTask(this), recentSignUpdateFrequency, recentSignUpdateFrequency);	
+		}
 
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
@@ -110,6 +122,7 @@ public class WebAuction extends JavaPlugin {
 		getConfig().addDefault("MySQL.Port", "3306");
 		getConfig().addDefault("MySQL.Database", "minecraft");
 		getConfig().addDefault("Misc.ReportSales", false);
+		getConfig().addDefault("Development.UseMultithreads", false);
 		getConfig().addDefault("Misc.SignDelay", 1000);
 		getConfig().addDefault("Updates.SaleAlertFrequency", 30L);
 		getConfig().addDefault("Updates.ShoutSignUpdateFrequency", 90L);
