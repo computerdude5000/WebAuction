@@ -297,7 +297,7 @@ public class MySQLDataQueries {
 				auction.setItemStack(new ItemStack(rs.getInt("name"), rs.getInt("quantity"), rs.getShort("damage")));
 				auction.setPlayerName(rs.getString("player"));
 				auction.setPrice(rs.getDouble("price"));
-				auction.setStarted(rs.getInt("started"));
+				auction.setCreated(rs.getInt("created"));
 			}
 		} catch (SQLException e) {
 			plugin.log.warning(plugin.logPrefix + "Unable to get auction " + id);
@@ -367,7 +367,7 @@ public class MySQLDataQueries {
 				auction.setItemStack(new ItemStack(rs.getInt("name"), rs.getInt("quantity"), rs.getShort("damage")));
 				auction.setPlayerName(rs.getString("player"));
 				auction.setPrice(rs.getDouble("price"));
-				auction.setStarted(rs.getInt("started"));
+				auction.setCreated(rs.getInt("created"));
 			}
 		} catch (SQLException e) {
 			plugin.log.warning(plugin.logPrefix + "Unable to get auction " + offset);

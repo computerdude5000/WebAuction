@@ -8,7 +8,7 @@ public class Auction {
 	private ItemStack itemStack;
 	private String playerName;
 	private double price;
-	private int started;
+	private int created;
 
 	public int getId() {
 		return id;
@@ -42,11 +42,11 @@ public class Auction {
 		this.price = price;
 	}
 
-	public int getStarted() {
-		return started;
+	public int getCreated() {
+		return created;
 	}
 
-	public void setStarted(int started) {
-		this.started = started;
+	public void setCreated(int created) {
+		this.created = created;
 	}
 }
