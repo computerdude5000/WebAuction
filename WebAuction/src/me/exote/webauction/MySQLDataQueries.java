@@ -119,10 +119,6 @@ public class MySQLDataQueries {
 			plugin.log.info(plugin.logPrefix + "Creating table WA_StorageCheck");
 			executeRawSQL("CREATE TABLE WA_StorageCheck (id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), time INT);");
 		}
-		if (!tableExists("WA_WebAdmins")) {
-			plugin.log.info(plugin.logPrefix + "Creating table WA_WebAdmins");
-			executeRawSQL("CREATE TABLE WA_WebAdmins (id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), name VARCHAR(255));");
-		}
 		if (!tableExists("WA_Items")) {
 			plugin.log.info(plugin.logPrefix + "Creating table WA_Items");
 			executeRawSQL("CREATE TABLE WA_Items (id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), name INT, damage INT, player VARCHAR(255), quantity INT);");
@@ -137,7 +133,7 @@ public class MySQLDataQueries {
 		}
 		if (!tableExists("WA_Auctions")) {
 			plugin.log.info(plugin.logPrefix + "Creating table WA_Auctions");
-			executeRawSQL("CREATE TABLE WA_Auctions (id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), name INT, damage INT, player VARCHAR(255), quantity INT, price DOUBLE, started INT);");
+			executeRawSQL("CREATE TABLE WA_Auctions (id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), name INT, damage INT, player VARCHAR(255), quantity INT, price DOUBLE, created INT);");
 		}
 		if (!tableExists("WA_SellPrice")) {
 			plugin.log.info(plugin.logPrefix + "Creating table WA_SellPrice");
