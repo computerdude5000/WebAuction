@@ -9,6 +9,9 @@ public class Auction {
 	private String playerName;
 	private double price;
 	private int created;
+	private Boolean allowBids;
+	private Double currentBid;
+	private String currentWinner;
 
 	public int getId() {
 		return id;
@@ -48,5 +51,29 @@ public class Auction {
 
 	public void setCreated(int created) {
 		this.created = created;
+	}
+	
+	public Boolean getAllowBids(){
+		return allowBids;
+	}
+	
+	public void setAllowBids(Boolean bid){
+		this.allowBids = bid;
+	}
+	
+	public Double getCurrentBid(){
+		return currentBid;
+	}
+	
+	public void setCurrentBid(Double bid){
+		this.currentBid = bid;
+	}
+	
+	public String getCurrentWinner(){
+		return currentWinner;
+	}
+	
+	public void setCurrentWinner(String player){
+		this.currentWinner = player;
 	}
 }

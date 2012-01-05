@@ -11,6 +11,9 @@ import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 
+import com.bergerkiller.bukkit.sl.API.Variable;
+import com.bergerkiller.bukkit.sl.API.Variables;
+
 public class RecentSignTask implements Runnable {
 
 	private final WebAuction plugin;
@@ -23,9 +26,32 @@ public class RecentSignTask implements Runnable {
 	public void run() {
 
 		List<Location> toRemove = new ArrayList<Location>();
-
+		List<Variable> WANames = new ArrayList<Variable>();
+		List<Variable> WAPrices = new ArrayList<Variable>();
+		List<Variable> WAQuants = new ArrayList<Variable>();
+		
 		int totalAuctionCount = plugin.dataQueries.getTotalAuctionCount();
-
+		if (plugin.useSignLink){
+			for (int i = 0; i < plugin.numberOfRecentLink; i++){
+				Variable tempName = Variables.get("WAName"+i);
+				Variable tempQuant = Variables.get("WAQuant"+i);
+				Variable tempPrice = Variables.get("WAPrice"+i);
+				tempName.setDefault("N/A");
+				tempQuant.setDefault("N/A");
+				tempPrice.setDefault("N/A");
+				if (i < totalAuctionCount -1){
+					Auction offsetAuction = plugin.dataQueries.getAuctionForOffset(i);
+					ItemStack stack = offsetAuction.getItemStack();			
+					tempName.set(stack.getType().toString());
+					tempQuant.set(stack.getAmount()+"");
+					tempPrice.set(plugin.economy.format(offsetAuction.getPrice()));
+					WANames.add(tempName);
+					WAQuants.add(tempQuant);
+					WAPrices.add(tempPrice);
+				}
+			}
+		}
+		if (plugin.useOriginalRecent){
 		for (Location key : plugin.recentSigns.keySet()) {
 			int offset = plugin.recentSigns.get(key);
 			if (offset <= totalAuctionCount) {
@@ -34,7 +60,7 @@ public class RecentSignTask implements Runnable {
 				ItemStack stack = offsetAuction.getItemStack();
 				int qty = stack.getAmount();
 				String formattedPrice = plugin.economy.format(offsetAuction.getPrice());
-
+				
 				if (key.getBlock().getType() == Material.SIGN_POST || key.getBlock().getType() == Material.WALL_SIGN) {
 					Sign thisSign = (Sign) key.getBlock().getState();
 					thisSign.setLine(1, stack.getType().toString());
@@ -55,6 +81,7 @@ public class RecentSignTask implements Runnable {
 					toRemove.add(key);
 				}
 			}
+		}
 		}
 
 		// Remove any signs flagged for removal

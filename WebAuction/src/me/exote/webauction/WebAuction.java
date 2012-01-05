@@ -37,6 +37,10 @@ public class WebAuction extends JavaPlugin {
 	public Map<Location, Integer> shoutSigns = new HashMap<Location, Integer>();
 
 	public int signDelay = 0;
+	public int numberOfRecentLink = 0;
+	
+	public Boolean useSignLink = false;
+	public Boolean useOriginalRecent = true;
 
 	public Permission permission = null;
 	public Economy economy = null;
@@ -60,8 +64,11 @@ public class WebAuction extends JavaPlugin {
 		long shoutSignUpdateFrequency = getConfig().getLong("Updates.ShoutSignUpdateFrequency");
 		long recentSignUpdateFrequency = getConfig().getLong("Updates.RecentSignUpdateFrequency");
 		boolean getMessages = getConfig().getBoolean("Misc.ReportSales");
+		useOriginalRecent = getConfig().getBoolean("Misc.UseOriginalRecentSigns");
 		boolean useMultithreads = getConfig().getBoolean("Development.UseMultithreads");
 		signDelay = getConfig().getInt("Misc.SignDelay");
+		useSignLink = getConfig().getBoolean("SignLink.UseSignLink");
+		numberOfRecentLink = getConfig().getInt("SignLink.NumberOfLatestAuctionsToTrack");
 
 		getCommand("wa").setExecutor(new WebAuctionCommands(this));
 
@@ -122,8 +129,11 @@ public class WebAuction extends JavaPlugin {
 		getConfig().addDefault("MySQL.Port", "3306");
 		getConfig().addDefault("MySQL.Database", "minecraft");
 		getConfig().addDefault("Misc.ReportSales", false);
+		getConfig().addDefault("Misc.UseOriginalRecentSigns", false);
 		getConfig().addDefault("Development.UseMultithreads", false);
 		getConfig().addDefault("Misc.SignDelay", 1000);
+		getConfig().addDefault("SignLink.UseSignLink", false);
+		getConfig().addDefault("SignLink.NumberOfLatestAuctionsToTrack", 10);
 		getConfig().addDefault("Updates.SaleAlertFrequency", 30L);
 		getConfig().addDefault("Updates.ShoutSignUpdateFrequency", 90L);
 		getConfig().addDefault("Updates.RecentSignUpdateFrequency", 160L);

@@ -133,7 +133,7 @@ public class MySQLDataQueries {
 		}
 		if (!tableExists("WA_Auctions")) {
 			plugin.log.info(plugin.logPrefix + "Creating table WA_Auctions");
-			executeRawSQL("CREATE TABLE WA_Auctions (id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), name INT, damage INT, player VARCHAR(255), quantity INT, price DOUBLE, created INT);");
+			executeRawSQL("CREATE TABLE WA_Auctions (id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), name INT, damage INT, player VARCHAR(255), quantity INT, price DOUBLE, created INT, allowBids BOOLEAN Default '0', currentBid DOUBLE, currentWinner VARCHAR(255);");
 		}
 		if (!tableExists("WA_SellPrice")) {
 			plugin.log.info(plugin.logPrefix + "Creating table WA_SellPrice");
@@ -298,6 +298,9 @@ public class MySQLDataQueries {
 				auction.setPlayerName(rs.getString("player"));
 				auction.setPrice(rs.getDouble("price"));
 				auction.setCreated(rs.getInt("created"));
+				auction.setAllowBids(rs.getBoolean("allowBids"));
+				auction.setCurrentBid(rs.getDouble("currentBid"));
+				auction.setCurrentWinner(rs.getString("currentWinner"));
 			}
 		} catch (SQLException e) {
 			plugin.log.warning(plugin.logPrefix + "Unable to get auction " + id);
