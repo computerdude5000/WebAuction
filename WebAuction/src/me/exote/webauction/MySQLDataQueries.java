@@ -133,7 +133,7 @@ public class MySQLDataQueries {
 		}
 		if (!tableExists("WA_Auctions")) {
 			plugin.log.info(plugin.logPrefix + "Creating table WA_Auctions");
-			executeRawSQL("CREATE TABLE WA_Auctions (id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), name INT, damage INT, player VARCHAR(255), quantity INT, price DOUBLE, created INT, allowBids BOOLEAN Default '0', currentBid DOUBLE, currentWinner VARCHAR(255);");
+			executeRawSQL("CREATE TABLE WA_Auctions (id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), name INT, damage INT, player VARCHAR(255), quantity INT, price DOUBLE, created INT, allowBids BOOLEAN Default '0', currentBid DOUBLE, currentWinner VARCHAR(255));");
 		}
 		if (!tableExists("WA_SellPrice")) {
 			plugin.log.info(plugin.logPrefix + "Creating table WA_SellPrice");

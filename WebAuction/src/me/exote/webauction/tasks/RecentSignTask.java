@@ -29,6 +29,7 @@ public class RecentSignTask implements Runnable {
 		List<Variable> WANames = new ArrayList<Variable>();
 		List<Variable> WAPrices = new ArrayList<Variable>();
 		List<Variable> WAQuants = new ArrayList<Variable>();
+		List<Variable> WASellers = new ArrayList<Variable>();
 		
 		int totalAuctionCount = plugin.dataQueries.getTotalAuctionCount();
 		if (plugin.useSignLink){
@@ -36,18 +37,22 @@ public class RecentSignTask implements Runnable {
 				Variable tempName = Variables.get("WAName"+i);
 				Variable tempQuant = Variables.get("WAQuant"+i);
 				Variable tempPrice = Variables.get("WAPrice"+i);
+				Variable tempSeller = Variables.get("WASeller"+i);
 				tempName.setDefault("N/A");
 				tempQuant.setDefault("N/A");
 				tempPrice.setDefault("N/A");
+				tempSeller.setDefault("N/A");
 				if (i < totalAuctionCount -1){
 					Auction offsetAuction = plugin.dataQueries.getAuctionForOffset(i);
 					ItemStack stack = offsetAuction.getItemStack();			
 					tempName.set(stack.getType().toString());
 					tempQuant.set(stack.getAmount()+"");
 					tempPrice.set(plugin.economy.format(offsetAuction.getPrice()));
+					tempSeller.set(offsetAuction.getPlayerName());
 					WANames.add(tempName);
 					WAQuants.add(tempQuant);
 					WAPrices.add(tempPrice);
+					WASellers.add(tempSeller);
 				}
 			}
 		}

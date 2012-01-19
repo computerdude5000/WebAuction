@@ -44,11 +44,12 @@ public class WebAuctionPlayerListener extends PlayerListener {
 		Player player = event.getPlayer();
 
 		// Alert player of any new sale alerts
-		List<SaleAlert> saleAlerts = plugin.dataQueries.getNewSaleAlertsForSeller(player);
-		for (SaleAlert saleAlert : saleAlerts) {
-			player.sendMessage(plugin.logPrefix + "You sold " + saleAlert.getQuantity() + " " + saleAlert.getItem() + " to " + saleAlert.getBuyer() + " for "
-					+ saleAlert.getPriceEach() + " each.");
-			plugin.dataQueries.markSaleAlertSeen(saleAlert.getId());
+		if (plugin.showSalesOnJoin == true){
+			List<SaleAlert> saleAlerts = plugin.dataQueries.getNewSaleAlertsForSeller(player);
+			for (SaleAlert saleAlert : saleAlerts) {
+				player.sendMessage(plugin.logPrefix + "You sold " + saleAlert.getQuantity() + " " + saleAlert.getItem() + " to " + saleAlert.getBuyer() + " for "+ saleAlert.getPriceEach() + " each.");
+				plugin.dataQueries.markSaleAlertSeen(saleAlert.getId());
+			}
 		}
 
 		// Alert player of any new mail
@@ -70,8 +71,8 @@ public class WebAuctionPlayerListener extends PlayerListener {
 			isAdmin = 1;
 		}
 
-		AuctionPlayer auctionPlayer = plugin.dataQueries.getPlayer(player);
-		if (null != auctionPlayer) {
+		if (null != plugin.dataQueries.getPlayer(player)) {
+			plugin.log.info(plugin.logPrefix + "Player found - "+ player.getName()+ " with permissions: canbuy = " + canBuy + " cansell = " + canSell + " isAdmin = " + isAdmin);
 			// Update permissions
 			plugin.dataQueries.updatePlayerPermissions(player, canBuy, canSell, isAdmin);
 		} else {

@@ -41,6 +41,8 @@ public class WebAuction extends JavaPlugin {
 	
 	public Boolean useSignLink = false;
 	public Boolean useOriginalRecent = true;
+	
+	public Boolean showSalesOnJoin = false;
 
 	public Permission permission = null;
 	public Economy economy = null;
@@ -65,6 +67,7 @@ public class WebAuction extends JavaPlugin {
 		long recentSignUpdateFrequency = getConfig().getLong("Updates.RecentSignUpdateFrequency");
 		boolean getMessages = getConfig().getBoolean("Misc.ReportSales");
 		useOriginalRecent = getConfig().getBoolean("Misc.UseOriginalRecentSigns");
+		showSalesOnJoin = getConfig().getBoolean("Misc.ShowSalesOnJoin");
 		boolean useMultithreads = getConfig().getBoolean("Development.UseMultithreads");
 		signDelay = getConfig().getInt("Misc.SignDelay");
 		useSignLink = getConfig().getBoolean("SignLink.UseSignLink");
@@ -130,6 +133,7 @@ public class WebAuction extends JavaPlugin {
 		getConfig().addDefault("MySQL.Database", "minecraft");
 		getConfig().addDefault("Misc.ReportSales", false);
 		getConfig().addDefault("Misc.UseOriginalRecentSigns", false);
+		getConfig().addDefault("Misc.ShowSalesOnJoin", false);
 		getConfig().addDefault("Development.UseMultithreads", false);
 		getConfig().addDefault("Misc.SignDelay", 1000);
 		getConfig().addDefault("SignLink.UseSignLink", false);
