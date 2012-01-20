@@ -19,7 +19,6 @@ import me.exote.webauction.dao.SaleAlert;
 
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class MySQLDataQueries {
@@ -230,7 +229,7 @@ public class MySQLDataQueries {
 		return signLocations;
 	}
 
-	public List<SaleAlert> getNewSaleAlertsForSeller(Player player) {
+	public List<SaleAlert> getNewSaleAlertsForSeller(String player) {
 		List<SaleAlert> saleAlerts = new ArrayList<SaleAlert>();
 
 		Connection conn = getConnection();
@@ -239,7 +238,7 @@ public class MySQLDataQueries {
 
 		try {
 			st = conn.prepareStatement("SELECT * FROM WA_SaleAlerts WHERE seller = ? AND alerted = ?");
-			st.setString(1, player.getName());
+			st.setString(1, player);
 			st.setInt(2, 0);
 			rs = st.executeQuery();
 			while (rs.next()) {
@@ -401,7 +400,7 @@ public class MySQLDataQueries {
 		}
 	}
 
-	public void updatePlayerPassword(Player player, String newPass) {
+	public void updatePlayerPassword(String player, String newPass) {
 		Connection conn = getConnection();
 		PreparedStatement st = null;
 		ResultSet rs = null;
@@ -409,10 +408,10 @@ public class MySQLDataQueries {
 		try {
 			st = conn.prepareStatement("UPDATE WA_Players SET pass = ? WHERE name = ?");
 			st.setString(1, newPass);
-			st.setString(2, player.getName());
+			st.setString(2, player);
 			st.executeUpdate();
 		} catch (SQLException e) {
-			plugin.log.warning(plugin.logPrefix + "Unable to update password for player: " + player.getName());
+			plugin.log.warning(plugin.logPrefix + "Unable to update password for player: " + player);
 			e.printStackTrace();
 		} finally {
 			closeResources(conn, st, rs);
@@ -461,7 +460,7 @@ public class MySQLDataQueries {
 		}
 	}
 
-	public boolean hasMail(Player player) {
+	public boolean hasMail(String player) {
 		boolean exists = false;
 		Connection conn = getConnection();
 		PreparedStatement st = null;
@@ -469,7 +468,7 @@ public class MySQLDataQueries {
 
 		try {
 			st = conn.prepareStatement("SELECT * FROM WA_Mail WHERE name = ?");
-			st.setString(1, player.getName());
+			st.setString(1, player);
 			rs = st.executeQuery();
 			while (rs.next()) {
 				exists = true;
@@ -483,7 +482,7 @@ public class MySQLDataQueries {
 		return exists;
 	}
 
-	public AuctionPlayer getPlayer(Player player) {
+	public AuctionPlayer getPlayer(String player) {
 		AuctionPlayer waPlayer = null;
 
 		Connection conn = getConnection();
@@ -492,7 +491,7 @@ public class MySQLDataQueries {
 
 		try {
 			st = conn.prepareStatement("SELECT * FROM WA_Players WHERE name = ?");
-			st.setString(1, player.getName());
+			st.setString(1, player);
 			rs = st.executeQuery();
 			while (rs.next()) {
 				waPlayer = new AuctionPlayer();
@@ -513,7 +512,7 @@ public class MySQLDataQueries {
 		return waPlayer;
 	}
 
-	public void updatePlayerPermissions(Player player, int canBuy, int canSell, int isAdmin) {
+	public void updatePlayerPermissions(String player, int canBuy, int canSell, int isAdmin) {
 		Connection conn = getConnection();
 		PreparedStatement st = null;
 		ResultSet rs = null;
@@ -523,7 +522,7 @@ public class MySQLDataQueries {
 			st.setInt(1, canBuy);
 			st.setInt(2, canSell);
 			st.setInt(3, isAdmin);
-			st.setString(4, player.getName());
+			st.setString(4, player);
 			st.executeUpdate();
 		} catch (SQLException e) {
 			plugin.log.warning(plugin.logPrefix + "Unable to update player permissions in DB");
@@ -533,14 +532,14 @@ public class MySQLDataQueries {
 		}
 	}
 
-	public void createPlayer(Player player, String pass, double money, int canBuy, int canSell, int isAdmin) {
+	public void createPlayer(String player, String pass, double money, int canBuy, int canSell, int isAdmin) {
 		Connection conn = getConnection();
 		PreparedStatement st = null;
 		ResultSet rs = null;
 
 		try {
 			st = conn.prepareStatement("INSERT INTO WA_Players (name, pass, money, canBuy, canSell, isAdmin) VALUES (?, ?, ?, ?, ?, ?)");
-			st.setString(1, player.getName());
+			st.setString(1, player);
 			st.setString(2, pass);
 			st.setDouble(3, money);
 			st.setInt(4, canBuy);
@@ -555,7 +554,7 @@ public class MySQLDataQueries {
 		}
 	}
 
-	public void updatePlayerMoney(Player player, double money) {
+	public void updatePlayerMoney(String player, double money) {
 		Connection conn = getConnection();
 		PreparedStatement st = null;
 		ResultSet rs = null;
@@ -563,7 +562,7 @@ public class MySQLDataQueries {
 		try {
 			st = conn.prepareStatement("UPDATE WA_Players SET money = ? WHERE name = ?");
 			st.setDouble(1, money);
-			st.setString(2, player.getName());
+			st.setString(2, player);
 			st.executeUpdate();
 		} catch (SQLException e) {
 			plugin.log.warning(plugin.logPrefix + "Unable to update player money in DB");
@@ -573,7 +572,7 @@ public class MySQLDataQueries {
 		}
 	}
 
-	public List<AuctionItem> getItems(Player player, int itemID, int damage, boolean reverseOrder) {
+	public List<AuctionItem> getItems(String player, int itemID, int damage, boolean reverseOrder) {
 		List<AuctionItem> auctionItems = new ArrayList<AuctionItem>();
 
 		Connection conn = getConnection();
@@ -586,7 +585,7 @@ public class MySQLDataQueries {
 				sql += " ORDER BY id DESC";
 			}
 			st = conn.prepareStatement(sql);
-			st.setString(1, player.getName());
+			st.setString(1, player);
 			st.setInt(2, itemID);
 			st.setInt(3, damage);
 			rs = st.executeQuery();
@@ -694,7 +693,7 @@ public class MySQLDataQueries {
 		}
 	}
 
-	public void createItem(int itemID, int itemDamage, Player player, int quantity) {
+	public void createItem(int itemID, int itemDamage, String player, int quantity) {
 		Connection conn = getConnection();
 		PreparedStatement st = null;
 		ResultSet rs = null;
@@ -703,7 +702,7 @@ public class MySQLDataQueries {
 			st = conn.prepareStatement("INSERT INTO WA_Items (name, damage, player, quantity) VALUES (?, ?, ?, ?)");
 			st.setInt(1, itemID);
 			st.setInt(2, itemDamage);
-			st.setString(3, player.getName());
+			st.setString(3, player);
 			st.setInt(4, quantity);
 			st.executeUpdate();
 		} catch (SQLException e) {
@@ -733,7 +732,7 @@ public class MySQLDataQueries {
 		}
 	}
 
-	public List<AuctionMail> getMail(Player player) {
+	public List<AuctionMail> getMail(String player) {
 		List<AuctionMail> auctionMails = new ArrayList<AuctionMail>();
 
 		Connection conn = getConnection();
@@ -742,7 +741,7 @@ public class MySQLDataQueries {
 
 		try {
 			st = conn.prepareStatement("SELECT * FROM WA_Mail WHERE player = ?");
-			st.setString(1, player.getName());
+			st.setString(1, player);
 			rs = st.executeQuery();
 			while (rs.next()) {
 				AuctionMail auctionMail = new AuctionMail();

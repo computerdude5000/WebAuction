@@ -42,7 +42,7 @@ public class WebAuctionCommands implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] split) {
 
 		int params = split.length;
-		Player player = (Player) sender;
+		String player = ((Player) sender).getName();
 		if (params == 0) {
 			return false;
 		} else if (params == 1) {
@@ -50,9 +50,28 @@ public class WebAuctionCommands implements CommandExecutor {
 		} else if (params == 2) {
 			if (split[0].equals("password")) {
 				if (split[1] != null) {
+					int canBuy = 0;
+					int canSell = 0;
+					int isAdmin = 0;
+					if (plugin.permission.has(sender, "wa.canbuy")) {
+						canBuy = 1;
+					}
+					if (plugin.permission.has(sender, "wa.cansell")) {
+						canSell = 1;
+					}
+					if (plugin.permission.has(sender, "wa.webadmin")) {
+						isAdmin = 1;
+					}
+					if (null != plugin.dataQueries.getPlayer(player)) {
+						//no need to create a new account
+					} else {
+						plugin.log.info(plugin.logPrefix + "Player not found, creating account");
+						// create that person in database
+						plugin.dataQueries.createPlayer(player, "Password", 0.0d, canBuy, canSell, isAdmin);
+					}
 					String newPass = MD5(split[1]);
 					plugin.dataQueries.updatePlayerPassword(player, newPass);
-					player.sendMessage(plugin.logPrefix + "Password changed");
+					sender.sendMessage(plugin.logPrefix + "Password changed");
 					return true;
 				}
 			}

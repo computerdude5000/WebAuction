@@ -19,7 +19,7 @@ public class SaleAlertTask implements Runnable {
 	public void run() {
 		Player[] playerList = plugin.getServer().getOnlinePlayers();
 		for (Player player : playerList) {
-			List<SaleAlert> newSaleAlerts = plugin.dataQueries.getNewSaleAlertsForSeller(player);
+			List<SaleAlert> newSaleAlerts = plugin.dataQueries.getNewSaleAlertsForSeller(player.getName());
 			for (SaleAlert saleAlert : newSaleAlerts) {
 				String formattedPrice = plugin.economy.format(saleAlert.getPriceEach());
 				player.sendMessage(plugin.logPrefix + "You sold " + saleAlert.getQuantity() + " " + saleAlert.getItem() + " to " + saleAlert.getBuyer()
