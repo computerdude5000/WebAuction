@@ -14,7 +14,6 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginManager;
@@ -32,7 +31,7 @@ public class WebAuction extends JavaPlugin {
 
 	public MySQLDataQueries dataQueries;
 
-	public Map<Player, Long> lastSignUse = new HashMap<Player, Long>();
+	public Map<String, Long> lastSignUse = new HashMap<String , Long>();
 	public Map<Location, Integer> recentSigns = new HashMap<Location, Integer>();
 	public Map<Location, Integer> shoutSigns = new HashMap<Location, Integer>();
 

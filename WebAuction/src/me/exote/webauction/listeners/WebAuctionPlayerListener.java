@@ -22,6 +22,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class WebAuctionPlayerListener extends PlayerListener {
@@ -38,6 +39,11 @@ public class WebAuctionPlayerListener extends PlayerListener {
 		return rounded.doubleValue();
 	}
 
+	@Override
+	public void onPlayerQuit(PlayerQuitEvent event){
+		plugin.lastSignUse.remove(event.getPlayer().getName());
+	}
+	
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		String player = event.getPlayer().getName();
@@ -107,7 +113,7 @@ public class WebAuctionPlayerListener extends PlayerListener {
 				return;
 			}
 		}
-		plugin.lastSignUse.put(event.getPlayer(), plugin.getCurrentMilli());
+		plugin.lastSignUse.put(player, plugin.getCurrentMilli());
 
 		if (lines[1].equals("Deposit")) {
 			if (plugin.permission.has(event.getPlayer(), "wa.use.deposit.money")) {

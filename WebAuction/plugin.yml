@@ -35,6 +35,8 @@ permissions:
             wa.use.deposit.money: true
             wa.canbuy: true
             wa.cansell: true
+            wa.remove: false
+            wa.webadmin: false
     wa.use.withdraw.items:
         description: Lets you use the mailbox
     wa.use.withdraw.money:
