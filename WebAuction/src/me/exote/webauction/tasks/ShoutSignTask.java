@@ -1,15 +1,14 @@
 package me.exote.webauction.tasks;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import me.exote.webauction.WebAuction;
 import me.exote.webauction.dao.Auction;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ShoutSignTask implements Runnable {
 
@@ -24,7 +23,6 @@ public class ShoutSignTask implements Runnable {
 		plugin.log.info(plugin.logPrefix + "Current Auction id = " + lastAuction);
 	}
 
-	@Override
 	public void run() {
 		List<Location> toRemove = new ArrayList<Location>();
 

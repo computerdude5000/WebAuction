@@ -1,31 +1,26 @@
 package me.exote.webauction.listeners;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
 import me.exote.webauction.WebAuction;
 import me.exote.webauction.dao.AuctionItem;
 import me.exote.webauction.dao.AuctionMail;
 import me.exote.webauction.dao.AuctionPlayer;
 import me.exote.webauction.dao.SaleAlert;
-
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class WebAuctionPlayerListener extends PlayerListener {
+import java.math.BigDecimal;
+import java.util.*;
+
+public class WebAuctionPlayerListener implements Listener {
 
 	private final WebAuction plugin;
 
@@ -39,12 +34,12 @@ public class WebAuctionPlayerListener extends PlayerListener {
 		return rounded.doubleValue();
 	}
 
-	@Override
+	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event){
 		plugin.lastSignUse.remove(event.getPlayer().getName());
 	}
 	
-	@Override
+	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		String player = event.getPlayer().getName();
 
@@ -84,6 +79,7 @@ public class WebAuctionPlayerListener extends PlayerListener {
 	}
 
 	@SuppressWarnings("deprecation")
+    @EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
