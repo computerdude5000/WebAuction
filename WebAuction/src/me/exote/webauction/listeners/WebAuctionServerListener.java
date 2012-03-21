@@ -1,18 +1,18 @@
 package me.exote.webauction.listeners;
 
 import me.exote.webauction.WebAuction;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginEnableEvent;
 
-public class WebAuctionServerListener implements Listener {
+import org.bukkit.event.server.PluginEnableEvent;
+import org.bukkit.event.server.ServerListener;
+
+public class WebAuctionServerListener extends ServerListener {
 	private WebAuction plugin;
 
 	public WebAuctionServerListener(WebAuction webAuction) {
 		this.plugin = webAuction;
 	}
 
-	@EventHandler
+	@Override
 	public void onPluginEnable(PluginEnableEvent event) {
 		if (plugin.economy != null) {
 			if (plugin.economy.isEnabled()) {

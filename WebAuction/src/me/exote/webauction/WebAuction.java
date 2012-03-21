@@ -1,5 +1,9 @@
 package me.exote.webauction;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
+
 import me.exote.webauction.listeners.WebAuctionBlockListener;
 import me.exote.webauction.listeners.WebAuctionPlayerListener;
 import me.exote.webauction.listeners.WebAuctionServerListener;
@@ -8,14 +12,13 @@ import me.exote.webauction.tasks.SaleAlertTask;
 import me.exote.webauction.tasks.ShoutSignTask;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
+
 import org.bukkit.Location;
+import org.bukkit.event.Event;
+import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Logger;
 
 public class WebAuction extends JavaPlugin {
 
@@ -107,9 +110,12 @@ public class WebAuction extends JavaPlugin {
 		}
 
 		PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(playerListener, this);
-        pm.registerEvents(blockListener, this);
-        pm.registerEvents(serverListener, this);
+		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.SIGN_CHANGE, blockListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLUGIN_ENABLE, serverListener, Priority.Monitor, this);
 	}
 
 	@Override

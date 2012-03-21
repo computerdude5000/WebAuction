@@ -1,12 +1,12 @@
 package me.exote.webauction;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class WebAuctionCommands implements CommandExecutor {
 
@@ -38,6 +38,7 @@ public class WebAuctionCommands implements CommandExecutor {
 		return hexString.toString();
 	}
 
+	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] split) {
 
 		int params = split.length;
