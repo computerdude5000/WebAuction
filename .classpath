@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="WebAuction/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/Harris Plaisted/javacode/lib/iConomyv5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Harris Plaisted/javacode/lib/SignLink.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Harris Plaisted/javacode/lib/bukkit.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Harris Plaisted/javacode/lib/Vault.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

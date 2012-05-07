@@ -8,11 +8,11 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockListener;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class WebAuctionBlockListener extends BlockListener {
+public class WebAuctionBlockListener implements Listener {
 
 	private final WebAuction plugin;
 

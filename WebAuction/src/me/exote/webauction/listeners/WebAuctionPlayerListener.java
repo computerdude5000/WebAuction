@@ -21,11 +21,11 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class WebAuctionPlayerListener extends PlayerListener {
+public class WebAuctionPlayerListener implements Listener {
 
 	private final WebAuction plugin;
 
