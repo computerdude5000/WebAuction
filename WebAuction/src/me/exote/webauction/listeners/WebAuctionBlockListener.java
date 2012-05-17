@@ -2,13 +2,13 @@ package me.exote.webauction.listeners;
 
 import me.exote.webauction.WebAuction;
 import me.exote.webauction.dao.Auction;
-
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,7 +20,7 @@ public class WebAuctionBlockListener implements Listener {
 		this.plugin = plugin;
 	}
 
-	@Override
+	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
 		Block block = event.getBlock();
 		Player player = event.getPlayer();
@@ -37,6 +37,7 @@ public class WebAuctionBlockListener implements Listener {
 		}
 	}
 
+    @EventHandler
 	public void onSignChange(SignChangeEvent event) {
 		String[] lines = event.getLines();
 		Player player = event.getPlayer();

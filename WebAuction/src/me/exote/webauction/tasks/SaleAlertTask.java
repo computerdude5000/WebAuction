@@ -1,11 +1,10 @@
 package me.exote.webauction.tasks;
 
-import java.util.List;
-
 import me.exote.webauction.WebAuction;
 import me.exote.webauction.dao.SaleAlert;
-
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public class SaleAlertTask implements Runnable {
 
@@ -15,7 +14,6 @@ public class SaleAlertTask implements Runnable {
 		this.plugin = plugin;
 	}
 
-	@Override
 	public void run() {
 		Player[] playerList = plugin.getServer().getOnlinePlayers();
 		for (Player player : playerList) {

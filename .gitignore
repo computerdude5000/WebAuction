@@ -1,0 +1,12 @@
+# Mac OS
+.DS_Store
+
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea/
+out/
+
+# Local
+lib/

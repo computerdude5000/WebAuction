@@ -1,18 +1,16 @@
 package me.exote.webauction.tasks;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.bergerkiller.bukkit.sl.API.Variable;
+import com.bergerkiller.bukkit.sl.API.Variables;
 import me.exote.webauction.WebAuction;
 import me.exote.webauction.dao.Auction;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 
-import com.bergerkiller.bukkit.sl.API.Variable;
-import com.bergerkiller.bukkit.sl.API.Variables;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecentSignTask implements Runnable {
 
@@ -22,7 +20,6 @@ public class RecentSignTask implements Runnable {
 		this.plugin = plugin;
 	}
 
-	@Override
 	public void run() {
 
 		List<Location> toRemove = new ArrayList<Location>();
