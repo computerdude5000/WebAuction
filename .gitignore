@@ -10,5 +10,5 @@ out/
 
 # Local
 lib/
-#Eclipse
 bin/*
+*.project
