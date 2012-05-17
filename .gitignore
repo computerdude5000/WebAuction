@@ -11,4 +11,4 @@ out/
 # Local
 lib/
 #Eclipse
-bin/bin/
+bin/*

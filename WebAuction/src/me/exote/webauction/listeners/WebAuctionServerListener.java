@@ -13,7 +13,7 @@ public class WebAuctionServerListener implements Listener {
 
 	public WebAuctionServerListener(WebAuction webAuction) {
 		this.plugin = webAuction;
-	}
+	} 
 
 
 
